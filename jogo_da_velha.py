@@ -1,5 +1,5 @@
 """Módulo responsável por me permitir saber a versão do Sistema Operacional (Windows ou não)
-e agir de maneiracorreta utilizando o console a partir desse conhecimento"""
+e agir de maneira correta utilizando o console a partir desse conhecimento"""
 from os import system, name
 
 
@@ -31,5 +31,11 @@ def mostrar_tabuleiro(tab):
     print(interface)
 
 
-tabuleiro = [["", "", ""], ["", "", ""], ["", "", ""]]
-mostrar_tabuleiro(tabuleiro)
+def movimento(tab, player):
+    """Função responsável por computar o movimento do jogador"""
+    mostrar_tabuleiro(tab)
+    move = int(input(f"Digite onde quer colocar o {player}: "))
+    move -= 1
+    linha = move // len(tab)
+    coluna = move % len(tab)
+    tab[linha][coluna] = player
