@@ -39,7 +39,7 @@ def movimento(tab, player):
     linha = move // len(tab)
     coluna = move % len(tab)
     tab[linha][coluna] = player
-    print(confere_horizontal(tab, player))
+    print(confere_vitoria)
 
 
 def confere_horizontal(tab, player):
