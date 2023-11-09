@@ -44,6 +44,14 @@ def movimento(tab, player):
 
 def confere_horizontal(tab, player):
     """Confere se o jogador ganhou via conexão em horizontal"""
+    for i, _ in enumerate(tab):
+        venceu = True
+        for j, _ in enumerate(tab):
+            if tab[i][j] != player:
+                venceu = False
+                break
+        if venceu:
+            return True
     return False
 
 
