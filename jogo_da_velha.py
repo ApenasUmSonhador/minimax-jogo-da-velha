@@ -39,7 +39,7 @@ def movimento(tab, player):
     linha = move // len(tab)
     coluna = move % len(tab)
     tab[linha][coluna] = player
-    print(confere_vitoria)
+    print(confere_vitoria(tab, player))
 
 
 def confere_horizontal(tab, player):
@@ -57,12 +57,31 @@ def confere_horizontal(tab, player):
 
 def confere_vertical(tab, player):
     """Confere se o jogador ganhou via conexão em vertical"""
+    for i, _ in enumerate(tab):
+        venceu = True
+        for j, _ in enumerate(tab):
+            if tab[j][i] != player:
+                venceu = False
+                break
+        if venceu:
+            return True
     return False
 
 
 def confere_diagonal(tab, player):
     """Confere se o jogador ganhou via conexão em diagonal"""
-    return False
+    venceu = True
+    for i, _ in enumerate(tab):
+        if tab[i][i] != player:
+            venceu = False
+            break
+    if venceu:
+        return True
+    n = len(tab) - 1
+    for i, _ in enumerate(tab):
+        if tab[n - i][i] != player:
+            return False
+    return True
 
 
 def confere_vitoria(tab, player):
