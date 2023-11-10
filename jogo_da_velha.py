@@ -16,7 +16,6 @@ def clear():
 
 def mostrar_tabuleiro(tab):
     """Função reponsável por apresentar estado atual do tabuleiro ao usuário"""
-    clear()
     interface = "------------ \n"
     for i, _ in enumerate(tab):
         for j, _ in enumerate(tab):
@@ -25,7 +24,7 @@ def mostrar_tabuleiro(tab):
             elif tab[i][j] == "O":
                 interface += "O"
             else:
-                interface += " "
+                interface += str(i * 3 + j)
             interface += " | "
         interface += "\n------------ \n"
     print(interface)
@@ -33,13 +32,42 @@ def mostrar_tabuleiro(tab):
 
 def movimento(tab, n, player):
     """Função responsável por computar o movimento do jogador"""
-    mostrar_tabuleiro(tab)
-    move = int(input(f"Digite onde quer colocar o {player}: "))
-    move -= 1
-    linha = move // len(tab)
-    coluna = move % len(tab)
-    tab[linha][coluna] = player
-    n += 1
+    try:
+        move = int(input(f"Digite onde quer colocar o {player}: "))
+
+        if move < 0:
+            # Tratando erro caso digite inteiro < 0
+            clear()
+            mostrar_tabuleiro(tab)
+            print("Digite apenas números positivos!")
+            return movimento(tab, n, player)
+
+        linha = move // len(tab)
+        coluna = move % len(tab)
+
+        if tab[linha][coluna] == "X" or tab[linha][coluna] == "O":
+            clear()
+            mostrar_tabuleiro(tab)
+            print("Essa casa já está ocupada!")
+            return movimento(tab, n, player)
+        tab[linha][coluna] = player
+        n += 1
+
+    except ValueError:
+        # Tratando problemas de digitar não inteiros
+        clear()
+        mostrar_tabuleiro(tab)
+        print("Digite apenas INTEIROS!")
+        return movimento(tab, n, player)
+
+    except IndexError:
+        # Tratando problemas de digitar index > possível
+        clear()
+        mostrar_tabuleiro(tab)
+        print(f"Digite apenas números de 0 a {len(tab)**2 -1}!")
+        return movimento(tab, n, player)
+
+    clear()
     return n
 
 
@@ -105,14 +133,18 @@ def main():
     tabuleiro = [["", "", ""], ["", "", ""], ["", "", ""]]
     vitoria = empate = False
     i = 0
+
     while not vitoria or not empate:
+        # Jogada do player "X"
+        mostrar_tabuleiro(tabuleiro)
         i = movimento(tabuleiro, i, "X")
         empate = confere_empate(tabuleiro, i)
         vitoria = confere_vitoria(tabuleiro, "X")
-
         if empate or vitoria:
             break
 
+        # Jogada do player "O"
+        mostrar_tabuleiro(tabuleiro)
         i = movimento(tabuleiro, i, "O")
         empate = confere_empate(tabuleiro, i)
         vitoria = confere_vitoria(tabuleiro, "X")
