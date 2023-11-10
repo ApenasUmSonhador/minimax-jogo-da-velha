@@ -31,7 +31,7 @@ def mostrar_tabuleiro(tab):
     print(interface)
 
 
-def movimento(tab, player):
+def movimento(tab, n, player):
     """Função responsável por computar o movimento do jogador"""
     mostrar_tabuleiro(tab)
     move = int(input(f"Digite onde quer colocar o {player}: "))
@@ -39,56 +39,88 @@ def movimento(tab, player):
     linha = move // len(tab)
     coluna = move % len(tab)
     tab[linha][coluna] = player
-    print(confere_vitoria(tab, player))
-
-
-def confere_horizontal(tab, player):
-    """Confere se o jogador ganhou via conexão em horizontal"""
-    for i, _ in enumerate(tab):
-        venceu = True
-        for j, _ in enumerate(tab):
-            if tab[i][j] != player:
-                venceu = False
-                break
-        if venceu:
-            return True
-    return False
-
-
-def confere_vertical(tab, player):
-    """Confere se o jogador ganhou via conexão em vertical"""
-    for i, _ in enumerate(tab):
-        venceu = True
-        for j, _ in enumerate(tab):
-            if tab[j][i] != player:
-                venceu = False
-                break
-        if venceu:
-            return True
-    return False
-
-
-def confere_diagonal(tab, player):
-    """Confere se o jogador ganhou via conexão em diagonal"""
-    venceu = True
-    for i, _ in enumerate(tab):
-        if tab[i][i] != player:
-            venceu = False
-            break
-    if venceu:
-        return True
-    n = len(tab) - 1
-    for i, _ in enumerate(tab):
-        if tab[n - i][i] != player:
-            return False
-    return True
+    n += 1
+    return n
 
 
 def confere_vitoria(tab, player):
     """Confere se o jogador ganhou"""
+
+    def confere_vertical(tab, player):
+        """Confere se o jogador ganhou via conexão em vertical"""
+        for i, _ in enumerate(tab):
+            venceu = True
+            for j, _ in enumerate(tab):
+                if tab[j][i] != player:
+                    venceu = False
+                    break
+            if venceu:
+                return True
+        return False
+
+    def confere_horizontal(tab, player):
+        """Confere se o jogador ganhou via conexão em horizontal"""
+        for i, _ in enumerate(tab):
+            venceu = True
+            for j, _ in enumerate(tab):
+                if tab[i][j] != player:
+                    venceu = False
+                    break
+            if venceu:
+                return True
+        return False
+
+    def confere_diagonal(tab, player):
+        """Confere se o jogador ganhou via conexão em diagonal"""
+        venceu = True
+        for i, _ in enumerate(tab):
+            if tab[i][i] != player:
+                venceu = False
+                break
+        if venceu:
+            return True
+        n = len(tab) - 1
+        for i, _ in enumerate(tab):
+            if tab[n - i][i] != player:
+                return False
+        return True
+
     vitoria = (
         confere_horizontal(tab, player)
         or confere_vertical(tab, player)
         or confere_diagonal(tab, player)
     )
     return vitoria
+
+
+def confere_empate(tab, n):
+    """Confere se o jogo acabou em empate 'velha'"""
+    if n >= len(tab) ** 2:
+        return True
+    return False
+
+
+def main():
+    """Função que define o jogo em si e seu funcionamento."""
+    tabuleiro = [["", "", ""], ["", "", ""], ["", "", ""]]
+    vitoria = empate = False
+    i = 0
+    while not vitoria or not empate:
+        i = movimento(tabuleiro, i, "X")
+        empate = confere_empate(tabuleiro, i)
+        vitoria = confere_vitoria(tabuleiro, "X")
+
+        if empate or vitoria:
+            break
+
+        i = movimento(tabuleiro, i, "O")
+        empate = confere_empate(tabuleiro, i)
+        vitoria = confere_vitoria(tabuleiro, "X")
+        if empate or vitoria:
+            break
+
+    mostrar_tabuleiro(tabuleiro)
+    print("Fim de jogo!")
+
+
+main()
