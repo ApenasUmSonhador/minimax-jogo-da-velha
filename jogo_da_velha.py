@@ -1,5 +1,4 @@
-"""Módulo responsável por me permitir saber a versão do Sistema Operacional (Windows ou não)
-e agir de maneira correta utilizando o console a partir desse conhecimento"""
+"""Responsável permitir saber a versão do Sistema Operacional e acessar console"""
 from os import system, name
 
 
