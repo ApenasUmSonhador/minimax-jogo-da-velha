@@ -146,7 +146,7 @@ def main():
         mostrar_tabuleiro(tabuleiro)
         i = movimento(tabuleiro, i, "O")
         empate = confere_empate(tabuleiro, i)
-        vitoria = confere_vitoria(tabuleiro, "X")
+        vitoria = confere_vitoria(tabuleiro, "O")
         if empate or vitoria:
             break
 
